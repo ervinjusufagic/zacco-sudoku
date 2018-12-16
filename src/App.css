@@ -1,20 +1,33 @@
 .appView {
   display: flex;
   flex-direction: column;
-  flex-wrap: wrap;
 }
 .gameBoard {
   display: flex;
+  flex-direction: column;
+  border: 2px solid grey;
+}
+
+.cellContainer {
+  display: flex;
   flex-direction: row;
+  justify-content: center;
 }
 
 .cell {
-  width: 50px;
-  height: 50px;
-  border: 1px solid black;
+  width: 60px;
+  height: 60px;
+  border: 2px solid grey;
+
+  text-align: center;
 }
 
 .cellBtn {
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
+}
+
+.cellNum {
+  font-size: 30px;
+  color: black;
 }
