@@ -9,6 +9,7 @@ class App extends Component {
     this.changeNumber = this.changeNumber.bind(this);
     this.checkProgress = this.checkProgress.bind(this);
     this.chooseDifficulty = this.chooseDifficulty.bind(this);
+    this.splitPuzzle = this.splitPuzzle.bind(this);
   }
   state = {
     puzzles: [],
@@ -44,8 +45,6 @@ class App extends Component {
           //solution: responseJson.puzzles[0].solution
         });
         this.orderByDifficulty();
-        this.splitPuzzle();
-        console.log(this.state.puzzles);
       })
 
       .catch(error => {
@@ -71,23 +70,20 @@ class App extends Component {
         });
       }
     }
-    console.log(this.state.easyPuzzles);
-    console.log(this.state.mediumPuzzles);
-    console.log(this.state.hardPuzzles);
   }
 
   splitPuzzle() {
     const rows = [[], [], [], [], [], [], [], [], []];
 
-    rows[0].push(this.state.puzzle.puzzle.slice(0, 9));
-    rows[1].push(this.state.puzzle.puzzle.slice(9, 18));
-    rows[2].push(this.state.puzzle.puzzle.slice(18, 27));
-    rows[3].push(this.state.puzzle.puzzle.slice(27, 36));
-    rows[4].push(this.state.puzzle.puzzle.slice(36, 45));
-    rows[5].push(this.state.puzzle.puzzle.slice(45, 54));
-    rows[6].push(this.state.puzzle.puzzle.slice(54, 63));
-    rows[7].push(this.state.puzzle.puzzle.slice(63, 72));
-    rows[8].push(this.state.puzzle.puzzle.slice(72, 81));
+    rows[0].push(this.state.currentPuzzle.slice(0, 9));
+    rows[1].push(this.state.currentPuzzle.slice(9, 18));
+    rows[2].push(this.state.currentPuzzle.slice(18, 27));
+    rows[3].push(this.state.currentPuzzle.slice(27, 36));
+    rows[4].push(this.state.currentPuzzle.slice(36, 45));
+    rows[5].push(this.state.currentPuzzle.slice(45, 54));
+    rows[6].push(this.state.currentPuzzle.slice(54, 63));
+    rows[7].push(this.state.currentPuzzle.slice(63, 72));
+    rows[8].push(this.state.currentPuzzle.slice(72, 81));
 
     this.setState({
       rows: rows,
@@ -97,6 +93,7 @@ class App extends Component {
 
   renderCells(i) {
     let j = 0;
+
     return this.state.rows[i][0].map(cell => (
       <div
         className="cell"
@@ -126,15 +123,14 @@ class App extends Component {
   //actionhandlers
   handleSelectedCell(event) {
     this.state.selectedCell = event.target.value;
-    console.log(this.state.selectedCell);
   }
 
   changeNumber(event) {
-    let oldnumbers = this.state.puzzle.puzzle;
+    let oldnumbers = this.state.currentPuzzle;
     let updatedNumbers;
 
     oldnumbers[this.state.selectedCell] = parseInt(event.target.value);
-    console.log(typeof oldnumbers[this.state.selectedCell]);
+
     updatedNumbers = oldnumbers;
 
     this.splitPuzzle();
@@ -144,13 +140,10 @@ class App extends Component {
       cellIndex: 0,
       oldnumbers: updatedNumbers
     });
-
-    console.log(this.state.solution);
-    console.log(this.state.puzzle.puzzle);
   }
 
   checkProgress() {
-    let puzzle = this.state.puzzle.puzzle;
+    let puzzle = this.state.currentPuzzle;
     let solution = this.state.solution;
     let wrongAnswers = [];
     let correctAnswers = [];
@@ -172,36 +165,76 @@ class App extends Component {
       correctAnswers: correctAnswers,
       wrongAnswers: wrongAnswers
     });
-    console.log(correctAnswers);
-    console.log(wrongAnswers);
   }
+
+  // chooseDifficulty(event) {
+  //   this.setState({
+  //     isLoading: true
+  //   });
+  //   let puzzle = this.getRandomPuzzle(event.target.value);
+  //   this.splitPuzzle();
+  //   this.setState(
+  //     {
+  //       currentPuzzle: puzzle.puzzle,
+  //       solution: puzzle.solution,
+  //       selectedCell: null,
+  //       cellIndex: 0,
+  //       isLoading: false
+  //     },
+  //     () => {
+  //       this.splitPuzzle();
+  //     }
+  //   );
+  // }
 
   chooseDifficulty(event) {
-    console.log(event.target.value);
-    let puzzle = this.getRandomPuzzle(event.target.value);
-    console.log(puzzle);
-  }
-
-  getRandomPuzzle(difficulty) {
-    if (difficulty == "easy") {
-      let index = Math.floor(
-        Math.random() * Math.floor(this.state.easyPuzzles.length)
-      );
-      console.log(index);
-      return this.state.easyPuzzles[index];
-    }
-    if (difficulty == "medium") {
-      let index = Math.floor(
-        Math.random() * Math.floor(this.state.mediumPuzzles.length)
-      );
-      return this.state.mediumPuzzles[index];
-    }
-    if (difficulty == "hard") {
-      let index = Math.floor(
-        Math.random() * Math.floor(this.state.hardPuzzles.length)
-      );
-      return this.state.hardPuzzles[index];
-    }
+    this.setState(
+      {
+        isLoading: true,
+        difficulty: event.target.value
+      },
+      () => {
+        if (this.state.difficulty == "easy") {
+          let index = Math.floor(
+            Math.random() * Math.floor(this.state.easyPuzzles.length)
+          );
+          this.setState(
+            {
+              currentPuzzle: this.state.easyPuzzles[index].puzzle,
+              solution: this.state.easyPuzzles[index].solution,
+              cellIndex: 0
+            },
+            () => this.splitPuzzle()
+          );
+        }
+        if (this.state.difficulty == "medium") {
+          let index = Math.floor(
+            Math.random() * Math.floor(this.state.mediumPuzzles.length)
+          );
+          this.setState(
+            {
+              currentPuzzle: this.state.mediumPuzzles[index].puzzle,
+              solution: this.state.mediumPuzzles[index].solution,
+              cellIndex: 0
+            },
+            () => this.splitPuzzle()
+          );
+        }
+        if (this.state.difficulty == "hard") {
+          let index = Math.floor(
+            Math.random() * Math.floor(this.state.hardPuzzles.length)
+          );
+          this.setState(
+            {
+              currentPuzzle: this.state.hardPuzzles[index].puzzle,
+              solution: this.state.hardPuzzles[index].solution,
+              cellIndex: 0
+            },
+            () => this.splitPuzzle()
+          );
+        }
+      }
+    );
   }
 
   render() {
