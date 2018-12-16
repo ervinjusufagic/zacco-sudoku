@@ -349,6 +349,13 @@ class App extends Component {
           >
             Check progress
           </button>
+          <button
+              className="actionBtn"
+              hidden={this.state.difficulty === undefined ? true : false}
+              onClick={this.solve}
+            >
+              Solve sudoku
+            </button>
         </div>
 
         <div className="difficulty">
@@ -399,15 +406,7 @@ class App extends Component {
               HARD
             </button>
           </div>
-          <div>
-            <button
-              className="actionBtn"
-              hidden={this.state.difficulty === undefined ? true : false}
-              onClick={this.solve}
-            >
-              Solve sudoku
-            </button>
-          </div>
+          
         </div>
       </div>
     );
