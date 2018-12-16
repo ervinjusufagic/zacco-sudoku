@@ -112,14 +112,6 @@ class App extends Component {
     ));
   }
 
-  cellColor(cellIndex) {
-    for (let i = 0; i < this.state.wrongAnswers.length; i++) {
-      if (cellIndex === this.state.wrongAnswers[i] + 1) {
-        return { backgroundColor: "red" };
-      }
-    }
-  }
-
   //actionhandlers
   handleSelectedCell(event) {
     this.state.selectedCell = event.target.value;
@@ -167,26 +159,6 @@ class App extends Component {
     });
   }
 
-  // chooseDifficulty(event) {
-  //   this.setState({
-  //     isLoading: true
-  //   });
-  //   let puzzle = this.getRandomPuzzle(event.target.value);
-  //   this.splitPuzzle();
-  //   this.setState(
-  //     {
-  //       currentPuzzle: puzzle.puzzle,
-  //       solution: puzzle.solution,
-  //       selectedCell: null,
-  //       cellIndex: 0,
-  //       isLoading: false
-  //     },
-  //     () => {
-  //       this.splitPuzzle();
-  //     }
-  //   );
-  // }
-
   chooseDifficulty(event) {
     this.setState(
       {
@@ -194,7 +166,7 @@ class App extends Component {
         difficulty: event.target.value
       },
       () => {
-        if (this.state.difficulty == "easy") {
+        if (this.state.difficulty === "easy") {
           let index = Math.floor(
             Math.random() * Math.floor(this.state.easyPuzzles.length)
           );
@@ -202,12 +174,14 @@ class App extends Component {
             {
               currentPuzzle: this.state.easyPuzzles[index].puzzle,
               solution: this.state.easyPuzzles[index].solution,
+              correctAnswers: [],
+              wrongAnswers: [],
               cellIndex: 0
             },
             () => this.splitPuzzle()
           );
         }
-        if (this.state.difficulty == "medium") {
+        if (this.state.difficulty === "medium") {
           let index = Math.floor(
             Math.random() * Math.floor(this.state.mediumPuzzles.length)
           );
@@ -215,12 +189,14 @@ class App extends Component {
             {
               currentPuzzle: this.state.mediumPuzzles[index].puzzle,
               solution: this.state.mediumPuzzles[index].solution,
+              correctAnswers: [],
+              wrongAnswers: [],
               cellIndex: 0
             },
             () => this.splitPuzzle()
           );
         }
-        if (this.state.difficulty == "hard") {
+        if (this.state.difficulty === "hard") {
           let index = Math.floor(
             Math.random() * Math.floor(this.state.hardPuzzles.length)
           );
@@ -228,6 +204,8 @@ class App extends Component {
             {
               currentPuzzle: this.state.hardPuzzles[index].puzzle,
               solution: this.state.hardPuzzles[index].solution,
+              correctAnswers: [],
+              wrongAnswers: [],
               cellIndex: 0
             },
             () => this.splitPuzzle()
@@ -241,7 +219,9 @@ class App extends Component {
     return (
       <div className="appView">
         {this.state.isLoading ? (
-          "loading"
+          <span className="welcomeText">
+            Select a difficulty to start a game.
+          </span>
         ) : (
           <div className="gameBoard">
             <div className="grid">
@@ -263,55 +243,115 @@ class App extends Component {
         )}
 
         <div className="numberBtnContainer">
-          <button className="numberBtn" value={1} onClick={this.changeNumber}>
+          <button
+            className="numberBtn"
+            value={1}
+            onClick={this.changeNumber}
+            hidden={this.state.difficulty === undefined ? true : false}
+          >
             1
           </button>
-          <button className="numberBtn" value={2} onClick={this.changeNumber}>
+          <button
+            className="numberBtn"
+            value={2}
+            onClick={this.changeNumber}
+            hidden={this.state.difficulty === undefined ? true : false}
+          >
             2
           </button>
-          <button className="numberBtn" value={3} onClick={this.changeNumber}>
+          <button
+            className="numberBtn"
+            value={3}
+            onClick={this.changeNumber}
+            hidden={this.state.difficulty === undefined ? true : false}
+          >
             3
           </button>
-          <button className="numberBtn" value={4} onClick={this.changeNumber}>
+          <button
+            className="numberBtn"
+            value={4}
+            onClick={this.changeNumber}
+            hidden={this.state.difficulty === undefined ? true : false}
+          >
             4
           </button>
-          <button className="numberBtn" value={5} onClick={this.changeNumber}>
+          <button
+            className="numberBtn"
+            value={5}
+            onClick={this.changeNumber}
+            hidden={this.state.difficulty === undefined ? true : false}
+          >
             5
           </button>
-          <button className="numberBtn" value={6} onClick={this.changeNumber}>
+          <button
+            className="numberBtn"
+            value={6}
+            onClick={this.changeNumber}
+            hidden={this.state.difficulty === undefined ? true : false}
+          >
             6
           </button>
-          <button className="numberBtn" value={7} onClick={this.changeNumber}>
+          <button
+            className="numberBtn"
+            value={7}
+            onClick={this.changeNumber}
+            hidden={this.state.difficulty === undefined ? true : false}
+          >
             7
           </button>
-          <button className="numberBtn" value={8} onClick={this.changeNumber}>
+          <button
+            className="numberBtn"
+            value={8}
+            onClick={this.changeNumber}
+            hidden={this.state.difficulty === undefined ? true : false}
+          >
             8
           </button>
-          <button className="numberBtn" value={9} onClick={this.changeNumber}>
+          <button
+            className="numberBtn"
+            value={9}
+            onClick={this.changeNumber}
+            hidden={this.state.difficulty === undefined ? true : false}
+          >
             9
           </button>
         </div>
 
         <div className="actionBtnContainer">
-          <button className="actionBtn" onClick={this.checkProgress}>
+          <button
+            className="actionBtn"
+            onClick={this.checkProgress}
+            hidden={this.state.difficulty === undefined ? true : false}
+          >
             Check progress
           </button>
         </div>
 
         <div className="difficulty">
           <div className="difficultyLbl">
-            <label>Choose difficulty</label>
+            <label>Difficulty:</label>
           </div>
 
           <div className="difficultyBtnContainer">
             <button
+              style={
+                this.state.difficulty === "easy"
+                  ? { backgroundColor: "green" }
+                  : { backgroundColor: "white" }
+              }
               value="easy"
               className="actionBtn"
               onClick={this.chooseDifficulty}
             >
               EASY
             </button>
+
             <button
+              style={
+                this.state.difficulty === "medium"
+                  ? { backgroundColor: "yellow" }
+                  : { backgroundColor: "white" }
+              }
               value="medium"
               className="actionBtn"
               onClick={this.chooseDifficulty}
@@ -319,6 +359,11 @@ class App extends Component {
               MEDIUM
             </button>
             <button
+              style={
+                this.state.difficulty === "hard"
+                  ? { backgroundColor: "red" }
+                  : { backgroundColor: "white" }
+              }
               value="hard"
               className="actionBtn"
               onClick={this.chooseDifficulty}
@@ -330,7 +375,16 @@ class App extends Component {
       </div>
     );
   }
-  //border style
+  //styling
+
+  cellColor(cellIndex) {
+    for (let i = 0; i < this.state.wrongAnswers.length; i++) {
+      if (cellIndex === this.state.wrongAnswers[i] + 1) {
+        return { backgroundColor: "red" };
+      }
+    }
+  }
+
   renderBorders(i) {
     if (
       i === 0 ||
