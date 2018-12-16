@@ -33,7 +33,7 @@ class App extends Component {
   }
 
   getPuzzle() {
-    fetch("http://localhost:3000/puzzles", {
+    fetch("https://z-api.azurewebsites.net/puzzles", {
       method: "GET",
       headers: {
         "Content-Type": "application/json"
