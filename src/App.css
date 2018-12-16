@@ -1,4 +1,5 @@
-.appView {
+.appView,
+.difficulty {
   display: flex;
   flex-direction: column;
 }
@@ -30,4 +31,30 @@
 .cellNum {
   font-size: 30px;
   color: black;
+}
+
+.numberBtnContainer,
+.actionBtnContainer,
+.difficultyLbl,
+.difficultyBtnContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 10px;
+}
+
+.difficultyLbl {
+  font-size: 30px;
+}
+
+.numberBtn {
+  width: 50px;
+  height: 50px;
+  font-size: 30px;
+}
+
+.actionBtn {
+  width: 200px;
+  height: 50px;
+  font-size: 20px;
 }

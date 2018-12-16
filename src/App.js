@@ -8,17 +8,21 @@ class App extends Component {
     this.handleSelectedCell = this.handleSelectedCell.bind(this);
     this.changeNumber = this.changeNumber.bind(this);
     this.checkProgress = this.checkProgress.bind(this);
+    this.chooseDifficulty = this.chooseDifficulty.bind(this);
   }
   state = {
-    puzzle: [],
-    rows: [],
+    puzzles: [],
+    currentPuzzle: [],
     solution: [],
-    isLoading: true,
-    selectedCell: null,
-    cellIndex: 0,
-    isMatch: true,
+    rows: [],
+    easyPuzzles: [],
+    mediumPuzzles: [],
+    hardPuzzles: [],
     wrongAnswers: [],
-    correctAnswers: []
+    correctAnswers: [],
+    cellIndex: 0,
+    selectedCell: null,
+    isLoading: true
   };
 
   componentWillMount() {
@@ -35,15 +39,41 @@ class App extends Component {
       .then(response => response.json())
       .then(responseJson => {
         this.setState({
-          puzzle: responseJson.puzzles[0],
-          solution: responseJson.puzzles[0].solution
+          puzzles: responseJson.puzzles
+          //puzzle: responseJson.puzzles[0],
+          //solution: responseJson.puzzles[0].solution
         });
+        this.orderByDifficulty();
         this.splitPuzzle();
+        console.log(this.state.puzzles);
       })
 
       .catch(error => {
         console.error(error);
       });
+  }
+
+  orderByDifficulty() {
+    for (let i = 0; i < this.state.puzzles.length; i++) {
+      if (this.state.puzzles[i].difficulty === "easy") {
+        this.setState({
+          easyPuzzles: [...this.state.easyPuzzles, this.state.puzzles[i]]
+        });
+      }
+      if (this.state.puzzles[i].difficulty === "medium") {
+        this.setState({
+          mediumPuzzles: [...this.state.mediumPuzzles, this.state.puzzles[i]]
+        });
+      }
+      if (this.state.puzzles[i].difficulty === "hard") {
+        this.setState({
+          hardPuzzles: [...this.state.hardPuzzles, this.state.puzzles[i]]
+        });
+      }
+    }
+    console.log(this.state.easyPuzzles);
+    console.log(this.state.mediumPuzzles);
+    console.log(this.state.hardPuzzles);
   }
 
   splitPuzzle() {
@@ -146,6 +176,34 @@ class App extends Component {
     console.log(wrongAnswers);
   }
 
+  chooseDifficulty(event) {
+    console.log(event.target.value);
+    let puzzle = this.getRandomPuzzle(event.target.value);
+    console.log(puzzle);
+  }
+
+  getRandomPuzzle(difficulty) {
+    if (difficulty == "easy") {
+      let index = Math.floor(
+        Math.random() * Math.floor(this.state.easyPuzzles.length)
+      );
+      console.log(index);
+      return this.state.easyPuzzles[index];
+    }
+    if (difficulty == "medium") {
+      let index = Math.floor(
+        Math.random() * Math.floor(this.state.mediumPuzzles.length)
+      );
+      return this.state.mediumPuzzles[index];
+    }
+    if (difficulty == "hard") {
+      let index = Math.floor(
+        Math.random() * Math.floor(this.state.hardPuzzles.length)
+      );
+      return this.state.hardPuzzles[index];
+    }
+  }
+
   render() {
     return (
       <div className="appView">
@@ -171,38 +229,70 @@ class App extends Component {
           </div>
         )}
 
-        <div>
-          <button value={1} onClick={this.changeNumber}>
+        <div className="numberBtnContainer">
+          <button className="numberBtn" value={1} onClick={this.changeNumber}>
             1
           </button>
-          <button value={2} onClick={this.changeNumber}>
+          <button className="numberBtn" value={2} onClick={this.changeNumber}>
             2
           </button>
-          <button value={3} onClick={this.changeNumber}>
+          <button className="numberBtn" value={3} onClick={this.changeNumber}>
             3
           </button>
-          <button value={4} onClick={this.changeNumber}>
+          <button className="numberBtn" value={4} onClick={this.changeNumber}>
             4
           </button>
-          <button value={5} onClick={this.changeNumber}>
+          <button className="numberBtn" value={5} onClick={this.changeNumber}>
             5
           </button>
-          <button value={6} onClick={this.changeNumber}>
+          <button className="numberBtn" value={6} onClick={this.changeNumber}>
             6
           </button>
-          <button value={7} onClick={this.changeNumber}>
+          <button className="numberBtn" value={7} onClick={this.changeNumber}>
             7
           </button>
-          <button value={8} onClick={this.changeNumber}>
+          <button className="numberBtn" value={8} onClick={this.changeNumber}>
             8
           </button>
-          <button value={9} onClick={this.changeNumber}>
+          <button className="numberBtn" value={9} onClick={this.changeNumber}>
             9
           </button>
         </div>
 
-        <div>
-          <button onClick={this.checkProgress}>Check progress</button>
+        <div className="actionBtnContainer">
+          <button className="actionBtn" onClick={this.checkProgress}>
+            Check progress
+          </button>
+        </div>
+
+        <div className="difficulty">
+          <div className="difficultyLbl">
+            <label>Choose difficulty</label>
+          </div>
+
+          <div className="difficultyBtnContainer">
+            <button
+              value="easy"
+              className="actionBtn"
+              onClick={this.chooseDifficulty}
+            >
+              EASY
+            </button>
+            <button
+              value="medium"
+              className="actionBtn"
+              onClick={this.chooseDifficulty}
+            >
+              MEDIUM
+            </button>
+            <button
+              value="hard"
+              className="actionBtn"
+              onClick={this.chooseDifficulty}
+            >
+              HARD
+            </button>
+          </div>
         </div>
       </div>
     );
