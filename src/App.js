@@ -10,6 +10,7 @@ class App extends Component {
     this.checkProgress = this.checkProgress.bind(this);
     this.chooseDifficulty = this.chooseDifficulty.bind(this);
     this.splitPuzzle = this.splitPuzzle.bind(this);
+    this.solve = this.solve.bind(this);
   }
   state = {
     puzzles: [],
@@ -23,7 +24,8 @@ class App extends Component {
     correctAnswers: [],
     cellIndex: 0,
     selectedCell: null,
-    isLoading: true
+    isLoading: true,
+    haveWon: false
   };
 
   componentWillMount() {
@@ -45,6 +47,7 @@ class App extends Component {
           //solution: responseJson.puzzles[0].solution
         });
         this.orderByDifficulty();
+        console.log(responseJson);
       })
 
       .catch(error => {
@@ -87,7 +90,8 @@ class App extends Component {
 
     this.setState({
       rows: rows,
-      isLoading: false
+      isLoading: false,
+      cellIndex: 0
     });
   }
 
@@ -139,6 +143,7 @@ class App extends Component {
     let solution = this.state.solution;
     let wrongAnswers = [];
     let correctAnswers = [];
+    let haveWon = false;
 
     for (let i = 0; i < solution.length; i++) {
       if (puzzle[i] !== 0) {
@@ -151,12 +156,28 @@ class App extends Component {
       }
     }
 
+    if (correctAnswers.length === 81) {
+      haveWon = true;
+    }
+
     this.setState({
       selectedCell: null,
       cellIndex: 0,
       correctAnswers: correctAnswers,
-      wrongAnswers: wrongAnswers
+      wrongAnswers: wrongAnswers,
+      haveWon: haveWon
     });
+  }
+
+  solve() {
+    this.setState(
+      {
+        currentPuzzle: this.state.solution,
+        selectedCell: null,
+        cellIndex: 0
+      },
+      () => this.splitPuzzle()
+    );
   }
 
   chooseDifficulty(event) {
@@ -176,7 +197,8 @@ class App extends Component {
               solution: this.state.easyPuzzles[index].solution,
               correctAnswers: [],
               wrongAnswers: [],
-              cellIndex: 0
+              cellIndex: 0,
+              haveWon: false
             },
             () => this.splitPuzzle()
           );
@@ -191,7 +213,8 @@ class App extends Component {
               solution: this.state.mediumPuzzles[index].solution,
               correctAnswers: [],
               wrongAnswers: [],
-              cellIndex: 0
+              cellIndex: 0,
+              haveWon: false
             },
             () => this.splitPuzzle()
           );
@@ -206,7 +229,8 @@ class App extends Component {
               solution: this.state.hardPuzzles[index].solution,
               correctAnswers: [],
               wrongAnswers: [],
-              cellIndex: 0
+              cellIndex: 0,
+              haveWon: false
             },
             () => this.splitPuzzle()
           );
@@ -329,7 +353,11 @@ class App extends Component {
 
         <div className="difficulty">
           <div className="difficultyLbl">
-            <label>Difficulty:</label>
+            <label>
+              {this.state.haveWon
+                ? "Congratulations! Choose a difficulty to play again!"
+                : "Difficulty:"}
+            </label>
           </div>
 
           <div className="difficultyBtnContainer">
@@ -371,6 +399,15 @@ class App extends Component {
               HARD
             </button>
           </div>
+          <div>
+            <button
+              className="actionBtn"
+              hidden={this.state.difficulty === undefined ? true : false}
+              onClick={this.solve}
+            >
+              Solve sudoku
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -381,6 +418,12 @@ class App extends Component {
     for (let i = 0; i < this.state.wrongAnswers.length; i++) {
       if (cellIndex === this.state.wrongAnswers[i] + 1) {
         return { backgroundColor: "red" };
+      }
+    }
+
+    if (this.state.haveWon) {
+      for (let i = 0; i < this.state.correctAnswers.length; i++) {
+        return { backgroundColor: "green" };
       }
     }
   }
