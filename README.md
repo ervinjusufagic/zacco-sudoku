@@ -18,10 +18,10 @@ Deployed to Microsoft Azure. Copied contents from build to ftp. (couldnt connect
 
 ### `Improvments`
 
-*implement redux for easier state managment and refactoring
-*better UIdesign
-*make numbers that appear from start not able to change
-*highlight button pressed
-*fix a bug where numbers remain from previous puzzle when changed puzzle
+* implement redux for easier state managment and refactoring
+* better UIdesign
+* make numbers that appear from start not able to change
+* highlight button pressed
+* fix a bug where numbers remain from previous puzzle when changed puzzle
 
 
