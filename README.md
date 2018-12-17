@@ -1,6 +1,6 @@
 ## Sudoku-react
 
-Simple sudoku client built in react that gets puzzles from [<zacco-sudoku-api](https://github.com/ervinjusufagic/zacco-sudoku-api)
+Simple sudoku client built in react that gets puzzles from [zacco-sudoku-api](https://github.com/ervinjusufagic/zacco-sudoku-api)
 
 ### `Run the client`
 
@@ -8,13 +8,13 @@ Simple sudoku client built in react that gets puzzles from [<zacco-sudoku-api](h
 2. npm install in root directory
 3. npm start 
 
-To be able to play you need to clone and run [<zacco-sudoku-api](https://github.com/ervinjusufagic/zacco-sudoku-api)
+To be able to play you need to clone and run [zacco-sudoku-api](https://github.com/ervinjusufagic/zacco-sudoku-api)
 
 ### `Deployment`
 Ran npm run build to generate `build` folder.<br>
 Deployed to Microsoft Azure. Copied contents from build to ftp. (couldnt connect github to azure with this project) 
 
-##[Live version] https://z-sudoku.azurewebsites.net/
+[Live version] https://z-sudoku.azurewebsites.net/
 
 ### `Improvments`
 
