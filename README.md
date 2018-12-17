@@ -14,7 +14,7 @@ To be able to play you need to clone and run [zacco-sudoku-api](https://github.c
 Ran npm run build to generate `build` folder.<br>
 Deployed to Microsoft Azure. Copied contents from build to ftp. (couldnt connect github to azure with this project) 
 
-[Live version]https://z-sudoku.azurewebsites.net/
+[Live version](https://z-sudoku.azurewebsites.net/)
 
 ### `Improvments`
 
